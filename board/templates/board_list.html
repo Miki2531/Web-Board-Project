@@ -1,0 +1,10 @@
+<div class="list-group">
+</div>
+<ul>
+  {% for board in boards %}
+  <li>
+    <a href="{% url 'topic_posts' board.id topic.id %}">{{ board.name }}</a>
+  </li>
+  {% endfor %}
+</ul>
+</div>
