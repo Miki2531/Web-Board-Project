@@ -4,17 +4,20 @@ from .models import *
 
 # Create your views here.
 
-def board_list(request):
+def home(request):
     boards = Board.objects.all()
-    context = {'boards': boards}
-    return render(request, 'home.html', context)
+    return render(request, 'home.html', {'boards': boards})
+    
+
+def board_topics(request, pk):
+    board = get_object_or_404(Board, pk=pk)
+    context = {'board': board}
+    return render(request, 'topics.html', context)
 
 
-def topic_posts(request, board_id, topic_id):
-    board = get_object_or_404(Board, id=board_id)
-    topic = get_object_or_404(Topic, id=topic_id, board=board)
-    posts = topic.posts.all()
-    return render(request, 'topic_posts.html', {'board': board, 'topic': topic, 'posts': posts})
+
+
+
 
 
     
