@@ -1,7 +1,7 @@
 from django.urls import reverse
 from django.urls import resolve
 from django.test import TestCase
-from .views import home, board_topics
+from .views import home, board_topics, new_topic
 from .models import Board
 
 class HomeTest(TestCase):
@@ -51,4 +51,30 @@ class BoardTopicsTest(TestCase):
 
 
 
+class NewTopicTests(TestCase):
+    def setUp(self):
+        Board.objects.create(name='Django', descriptions='Django board')
 
+    def test_new_topic_view_success_status_code(self):
+        # check if the request to the view is successful.
+        url = reverse('new_topic', kwargs={'pk': 1})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 200)
+
+    def test_new_topics_not_found_status_code(self):
+        # check if the view is raising a 404 error when the Board does not exist.
+        url = reverse('new_topic', kwargs={'pk': 90})
+        response = self.client.get(url)
+        self.assertEquals(response.status_code, 404)
+
+    def test_new_topic_url_resolve_new_topic_view(self):
+        # check if the right view is being used.
+        view = resolve('/boards/1/new/')
+        self.assertEquals(view.func, new_topic)
+
+    def test_new_topic_view_contains_link_back_to_board_topics_view(self):
+        # ensure the navigation back to the list of topics.
+        new_topic_url = reverse('new_topic', kwargs={'pk': 1})
+        board_topics_url = reverse('board_topics', kwargs={'pk': 1})
+        response = self.client.get(new_topic_url)
+        self.assertContains(response, 'href="{0}"'.format(board_topics_url))
