@@ -1,8 +1,9 @@
+from django.contrib.auth.models import User
 from django.urls import reverse
 from django.urls import resolve
 from django.test import TestCase
 from .views import home, board_topics, new_topic
-from .models import Board
+from .models import Board, Topic, Post
 
 class HomeTest(TestCase):
     def setUp(self):
@@ -54,6 +55,51 @@ class BoardTopicsTest(TestCase):
 class NewTopicTests(TestCase):
     def setUp(self):
         Board.objects.create(name='Django', descriptions='Django board')
+        User.objects.create(username='miko', email='miko@gmail.com', password='123')
+
+
+    def test_csrf(self):
+        url = reverse('new_topic', kwargs={'pk': 1})
+        response = self.client.get(url)
+        self.assertContains(response, 'csrfmiddlewaretoken')
+
+    def test_new_topic_valid_post_data(self):
+        url = reverse('new_topic', kwargs={'pk': 1})
+        data = {
+            'subject': 'New title',
+            'message': 'Django discussion'
+        }
+
+        response= self.client.get(data, url)
+        self.assertTrue(Topic.objects.exists())
+        self.assertTrue(Post.objects.exists())
+    
+    def test_new_topic_invalid_post_data(self):
+        """
+        Invalid post data should not redirect
+        The expected behavior is to show the form again with validation errors
+        """
+
+        url = reverse('new_topic', kwargs={'pk': 1})
+        response = self.client.get(url, {})
+        self.assertEquals(response.status_code, 200)
+
+    def test_new_topic_invalid_post_data_empty_fields(self):
+        '''
+           Invalid post data should not redirect
+           The expected behavior is to show the form again with validation errors
+        '''
+         
+        url = reverse('new_topic', kwargs={'pk': 1})
+        data = {
+             'subject': '',
+             'message': ''
+         }
+        
+        response = self.client.get(url, data)
+        self.assertEquals(response.status_code, 200)
+        self.assertFalse(Topic.objects.exists())
+        self.assertFalse(Post.objects.exists())
 
     def test_new_topic_view_success_status_code(self):
         # check if the request to the view is successful.
@@ -72,9 +118,13 @@ class NewTopicTests(TestCase):
         view = resolve('/boards/1/new/')
         self.assertEquals(view.func, new_topic)
 
-    def test_new_topic_view_contains_link_back_to_board_topics_view(self):
+    def test_new_topic_view_contains_navigation_links(self):
         # ensure the navigation back to the list of topics.
-        new_topic_url = reverse('new_topic', kwargs={'pk': 1})
         board_topics_url = reverse('board_topics', kwargs={'pk': 1})
-        response = self.client.get(new_topic_url)
-        self.assertContains(response, 'href="{0}"'.format(board_topics_url))
+        homepage_url = reverse('home')
+        new_topic_url = reverse('new_topic', kwargs={'pk': 1})
+
+        response = self.client.get(board_topics_url)
+
+        self.assertContains(response, 'href="{0}"'.format(new_topic_url)) 
+        self.assertContains(response, 'href="{0}"'.format(homepage_url))
