@@ -55,7 +55,7 @@ class BoardTopicsTest(TestCase):
 class NewTopicTests(TestCase):
     def setUp(self):
         Board.objects.create(name='Django', descriptions='Django board')
-        User.objects.create(username='miko', email='miko@gmail.com', password='123')
+        User.objects.create_user(username='miko', email='miko@gmail.com', password='123')
 
 
     def test_csrf(self):
