@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'board_data.apps.BoardDataConfig',
 
     'widget_tweaks',
+    'accounts',
 ]
 
 MIDDLEWARE = [

@@ -5,5 +5,6 @@ from board_data import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('board_data.urls'))
+    path('', include('board_data.urls')),
+    path('', include('accounts.urls'))
 ]
