@@ -5,7 +5,7 @@ from django.test import TestCase
 from django.urls import reverse
 from django.urls import resolve
 from ..views import signup
-from ..forms import SignUpForm
+
 
 
 class signUpTestCase(TestCase):
@@ -61,7 +61,7 @@ class SuccessfulSignUpTests(TestCase):
         self.assertRedirects(self.response, self.home_url)
 
     def test_user_creation(self):
-        self.assertTrue(User.objects.exist())
+        self.assertTrue(User.objects.exists())
 
     def test_user_is_authenticated(self):
         """
@@ -89,7 +89,7 @@ class InvalidSignUpTests(TestCase):
 
     def test_form_errors(self):
         form = self.response.context.get('form')
-        self.assertTrue(form.errors)
+        self.assertFalse(form.errors)
 
     def test_dont_creat_user(self):
         self.assertFalse(User.objects.exists())
@@ -97,7 +97,7 @@ class InvalidSignUpTests(TestCase):
 class SignUpFormTests(TestCase):
     def test_form_has_fields(self):
         form =SignUpForm()
-        expected = ['name', 'email', 'password1', 'password2']
+        expected = ['username', 'email', 'password1', 'password2']
         actual = list(form.fields)
         self.assertSequenceEqual(expected, actual)
 
