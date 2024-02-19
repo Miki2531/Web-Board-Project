@@ -8,6 +8,13 @@ class SignUpForm(UserCreationForm):
         model =User
         fields = ('username', 'email', 'password1', 'password2')
 
+        # widget = {
+        #     'username': forms.TextInput(attrs={'class': 'form-control', 'palceholder': 'Enter  your username'}),
+        #     'email': forms.EmailField(attrs={'class': 'form-control', 'palceholder': 'Enter your email'}),
+        #     'password1': forms.PasswordInput(attrs={'class': 'form-control', 'palceholder': 'Enter your password'}),
+        #     'password1': forms.PasswordInput(attrs={'class': 'form-control', 'palceholder': 'Enter your password'}),
+
+        # }
 
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
