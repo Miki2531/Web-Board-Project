@@ -7,7 +7,7 @@ from django.test import TestCase
 class PasswordResetMailTest(TestCase):
     def setUp(self):
         User.objects.create_user(username='miko', email = 'miko@gmail.com', password='miko123')
-        self.response = self.client.post(reverse('password_reset'), {'email': 'miko@gmail.com'})
+        response = self.client.post(reverse('password_reset'), {'email': 'miko@gmail.com'})
         self.email = mail.outbox[0]
 
     def test_email_subject(self):
