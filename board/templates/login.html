@@ -26,6 +26,7 @@
             <h3 class="card-title">Log in</h3>
             <form method="post" novalidate>
               {% csrf_token %}
+              
               <div class="form__field">
                 <label class="label" for="formInput#text">Username: </label>
                 <input class="input input--text" id="formInput#text" type="text" name="username" placeholder="Enter your username...">
@@ -35,6 +36,7 @@
                 <label class="label" for="formInput#password">Password: </label>
                 <input class="input input--password" id="formInput#password" type="password" name="password" placeholder="••••••••">
             </div>
+              <input type="hidden" name="next" value="{{ next }}">
               <button type="submit" class="btn btn-primary btn-block">Log in</button>
             </form>
           </div>
@@ -44,7 +46,7 @@
         </div>
         <div class="text-center py-2">
           <small>
-            <a href="#" class="text-muted">Forgot your password?</a>
+            <a href="{% url 'password_reset' %}" class="text-muted">Forgot your password?</a>
           </small>
         </div>
       </div>
