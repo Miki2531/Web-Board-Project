@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.urls import resolve
 from django.test import TestCase
-from ..views import board_topics
+from ..views import board_topics, TopicListView
 from ..models import Board
 from ..forms import NewTopicForm 
 
@@ -25,7 +25,7 @@ class BoardTopicsTest(TestCase):
 
     def test_board_topics_url_resolves_board_topics_view(self):
         view = resolve('/boards/1/')
-        self.assertEquals(view.func, board_topics)
+        self.assertEquals(view.func, TopicListView)
 
     def test_board_topics_view_contains_link_back_to_homepage(self):
         board_topics_url = reverse('board_topics', kwargs={'pk': 1})
