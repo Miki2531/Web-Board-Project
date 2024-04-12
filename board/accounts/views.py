@@ -1,4 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
+from django.forms import BaseModelForm
+from django.http import HttpResponse
 from django.views.generic import UpdateView, ListView
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
@@ -65,3 +67,4 @@ class UserUpdateView(UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+ 
