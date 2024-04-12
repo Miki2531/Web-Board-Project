@@ -57,8 +57,9 @@ class SuccessfulReplyTopicTest(ReplyTopicTestCase):
         '''
         A valid form submission redirect to the user
         '''
-        topic_post_url = reverse('topic_posts', kwargs={'pk': self.board.pk, 'topic_pk': self.topic.pk})
-        self.assertRedirects(self.response, topic_post_url)
+        url = reverse('topic_posts', kwargs={'pk': self.board.pk, 'topic_pk': self.topic.pk})
+        topic_posts_url = '{url}?page=1#2'.format(url=url)
+        self.assertRedirects(self.response, topic_posts_url)
 
     def test_reply_created(self):
         """

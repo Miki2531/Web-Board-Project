@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.urls import resolve
 from django.test import TestCase
-from ..views import home
+from ..views import home, BoardListView
 from ..models import Board, Topic, Post
 from ..forms import NewTopicForm   
 
@@ -19,7 +19,7 @@ class HomeTest(TestCase):
     
     def test_home_url_resolve_home_view(self):
         view = resolve('/')
-        self.assertEqual(view.func, home)
+        self.assertEqual(view.func, BoardListView)
 
     def test_home_view_contains_link_to_topics_page(self):
         board_topic_url = reverse('board_topics', kwargs={'pk': self.board.pk})
